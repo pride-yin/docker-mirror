@@ -1,0 +1,29 @@
+name: Sync Docker Images to Aliyun ACR
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'images.txt'
+      - '.github/workflows/sync_acr.yml'
+  workflow_dispatch:
+
+jobs:
+  sync-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Login to Aliyun Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.ACR_REGISTRY }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Execute sync script
+        run: bash "${{ github.workspace }}/sync.sh"
+        env:
+          ACR_REGISTRY: ${{ secrets.ACR_REGISTRY }}
+          ACR_NAMESPACE: ${{ secrets.ACR_NAMESPACE }}
