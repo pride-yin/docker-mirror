@@ -1,1 +1,3 @@
-
+OpenClaw 镜像同步列表
+每行一个镜像，格式：源镜像地址
+ghcr.io/openclaw/openclaw:latest
